@@ -6,13 +6,18 @@
 #### Wu Zhen Zé ##
 #####################################
 
-AINDA A DECIDIR
+###AINDA A DECIDIR###
 #####################################
 ########### JOGO -- sim
 ########### HINT -- sim
 ########### REGRAS -- sim
 #####################################
 
+####ESPAÇO PARA DEFINIR AS FUNÇÕES:::
+
+
+
+###
 
 #Leitura dos dados do jogador
 nomeJogador = input("Nome:")  #Nome
