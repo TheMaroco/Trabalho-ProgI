@@ -20,9 +20,9 @@
 ###
 
 #Leitura dos dados do jogador
-nomeJogador = input("Nome:")  #Nome
-montante = float(input("Com quantas fichas vais iniciar o jogo?:")) #Dinheiro com que começa o jogo   
-aposta = float(input("Quanto apostas?:"))    #Valor de cada aposta!
+nomeJogador = input("Nome: ")  #Nome
+montante = float(input("Com quantas fichas vais iniciar o jogo?: ")) #Dinheiro com que começa o jogo   
+aposta = float(input("Quanto apostas?: "))    #Valor de cada aposta!
 
 
 ###COMEÇA O JOGO###
