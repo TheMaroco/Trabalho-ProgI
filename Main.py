@@ -32,11 +32,11 @@ def valor(mao):
     Ensures: return do valor dos pontos da mao
     """
     valorCarta = {"A":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7,
-                 "8":8, "9":9, "10":10, "J":10, "Q":10, "K":10}
-    soma = 0
-    for face in mao:
+                 "8":8, "9":9, "10":10, "J":10, "Q":10, "K":10}     #dicionario que contem o valor de cada carta
+    soma = 0    #variavel onde se vai acumular o total de pontos de uma mao
+    for face in mao:    #ciclo que vai somar os pontos de uma mao
         soma += valorCarta[face[0]]
-        if soma > 21 and existeAs(mao) == True:
+        if soma > 21 and existeAs(mao) == True: #condicao que decide se o A tem valor 11 ou 1
             soma -= 10
     return soma
 
