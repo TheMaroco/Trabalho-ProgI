@@ -40,7 +40,21 @@ def valor(mao):
             soma -= 10
     return soma
 
+def ler_baralho(n):
+    """Lê o baralho usado na ronda n
 
+    Requires: int com número da ronda
+    Ensures: Lista com o Baralho respetivo à ronda
+    """
+    strBaralho = "baralho_" + str(n) + ".txt" #ARTIMANHA PARA LER OS BARALHOS INDICE n
+
+    baralho = open(strBaralho, 'r') #ABRE O BARALHO
+    listBaralho = [] #Lista do baralho
+    for linha in baralho:
+        listBaralho.append(baralho.readline()[:-1].split()) #GOD MODE DE MODULOS PARA criar o baralho
+    baralho.close() #FECHAR O FICHEIRO
+    
+    return listBaralho
 
 ###
 
