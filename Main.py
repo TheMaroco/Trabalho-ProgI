@@ -14,6 +14,31 @@
 #####################################
 
 ####ESPAÇO PARA DEFINIR AS FUNÇÕES:::
+def existeAs(mao):
+    """ Funcao que mostra se tem um As na mao
+    Requires: lista da mao
+    Ensures: return de um boolean true ou false
+    """
+    for face in mao:
+        if face[0] == 'A':
+            existe = True
+        else:
+            existe = False
+    return existe
+
+def valor(mao):
+    """ Calcula o valor da mao
+    Requires: lista da mao
+    Ensures: return do valor dos pontos da mao
+    """
+    valorCarta = {"A":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7,
+                 "8":8, "9":9, "10":10, "J":10, "Q":10, "K":10}
+    soma = 0
+    for face in mao:
+        soma += valorCarta[face[0]]
+        if soma > 21 and existeAs(mao) == True:
+            soma -= 10
+    return soma
 
 
 
