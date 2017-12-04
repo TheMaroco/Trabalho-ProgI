@@ -63,7 +63,17 @@ def bust(mao):
         rebentou = True
     return rebentou
 
+def blackjack(mao):
+    """ Verificar se tem balckjack na mão
+        Requires : lista da mão inicial
+        Ensures: se der 21 pontos devolve True, caso contrario devolve False
+    """
+    Blackjack = False
+    if valor(mao) == 21 :
+        Blackjack = True
 
+    return Blackjack
+     
     
 def ler_baralho(n):
     """Lê o baralho usado na ronda n
