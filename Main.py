@@ -40,6 +40,19 @@ def valor(mao):
             soma -= 10
     return soma
 
+def decisao_dealer(mao):
+    """ Determinar a decisão do dealer
+        Require : lista da mão do dealer
+        Ensures Return HIT ou STAND
+    """
+    pontos_dealer = valor(mao)
+
+    if pontos_dealer < 17 :
+        return 'HIT'
+    else:
+        return 'STAND'
+
+    
 def ler_baralho(n):
     """Lê o baralho usado na ronda n
 
