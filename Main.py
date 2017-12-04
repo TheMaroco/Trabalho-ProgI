@@ -52,6 +52,18 @@ def decisao_dealer(mao):
     else:
         return 'STAND'
 
+def bust(mao):
+    """ funçao que determina se o mao rebentou ou nao
+        Requires : lista da mao
+        Ensures: return True no caso de rebentar e False nao rebentar
+    """
+    
+    rebentou = False
+    if valor(mao) > 21:
+        rebentou = True
+    return rebentou
+
+
     
 def ler_baralho(n):
     """Lê o baralho usado na ronda n
