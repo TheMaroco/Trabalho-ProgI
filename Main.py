@@ -53,9 +53,9 @@ def decisao_dealer(mao):
         return 'STAND'
 
 def bust(mao):
-    """ funçao que determina se o mao rebentou ou nao
+    """ funçao que determina se a mao rebentou ou nao
         Requires : lista da mao
-        Ensures: return True no caso de rebentar e False nao rebentar
+        Ensures: return True no caso de rebentar e False se nao rebentar
     """
     
     rebentou = False
