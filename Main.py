@@ -40,6 +40,18 @@ def valor(mao):
             soma -= 10
     return soma
 
+def bust(mao):
+    bust = False
+    if valor(mao) > 21:
+        bust = True
+    return bust
+
+def blackjack(mao):
+    win = False
+    if valor(mao) == 21:
+        win = True
+    return win
+
 def decisao_dealer(mao):
     """ Determinar a decisão do dealer
         Require : lista da mão do dealer
