@@ -40,17 +40,6 @@ def valor(mao):
             soma -= 10
     return soma
 
-def bust(mao):
-    bust = False
-    if valor(mao) > 21:
-        bust = True
-    return bust
-
-def blackjack(mao):
-    win = False
-    if valor(mao) == 21:
-        win = True
-    return win
 
 def decisao_dealer(mao):
     """ Determinar a decisão do dealer
@@ -103,7 +92,44 @@ def ler_baralho(n):
     
     return listBaralho
 
-###
+
+"""def ronda(i,jogador,aposta):
+    ganho = 0
+    baralho = ler_baralho(i)
+    mao_jogador = [baralho[0],baralho[2]]
+    mao_dealer = [baralho[1],baralho[3]]
+    valor_jogador = valor(mao_jogador) # pontos do jogador
+    valor_dealer = valor(mao_dealer)   # pontos de dealer
+    
+    ###Joga o jogador:
+    if blackjack(mao_jogador):
+        resultado_jogador = 'vitória blackjack'
+    else:
+        
+        decisao_jogador = lower(input("HIT, STAND ?"))
+        if decisao_jogador != 'hit' or decisao_jogador != 'stand':
+            decisao_jogador = 'stand'
+        
+        while  not bust(mao_jogador) and not blackjack(mao_jogador) and decisao_jogador == 'hit':
+            contador = 1
+            if lower(input("HIT, STAND ?")) ==  "hit":
+                mao_jogador.append(baralho[3+contador])
+            contador += 1
+            mao_jogador = valor(mao_jogador)   
+    
+    if blackjack(mao_jogador):
+        if blackjack(mao_dealer):
+            resultado = 'empate'
+        else:
+            resultado = 'vitória blackjack'
+            ganho = (5 * aposta )/2
+    else:
+
+
+    ###Joga o dealer:
+       
+
+"""
 
 #Leitura dos dados do jogador
 jogador = input("Nome: ")  #Nome
