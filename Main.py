@@ -245,4 +245,8 @@ try:
 except:
   aposta = 10
 
+regra = input("Qual a regra do casino (s17 ou h17)?: ").upper() #Regra do casino
+if regra != "H17":
+    regra = "S17"
+
 ###COMEÇA O JOGO###
