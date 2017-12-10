@@ -106,6 +106,48 @@ def mostra_mao(mao):
     mao = mao.replace("),(", ") (")
     return mao
 
+def calcula_hint(mao_jogador,mao_dealer):
+    valor_mao_jogador = valor(mao_jogador)
+    
+    listaCarta = {}
+    listaCarta['A'] = 4
+    listaCarta['J'] = 4
+    listaCarta['Q'] = 4
+    listaCarta['K'] = 4
+
+    for i in range(2,11):              ### criei um dicionario de numeros de cartas que existem no baralho inicial ###
+        listaCarta[str(i)] = 4
+
+    contador = 0
+    for j in range(contador,len(mao_jogador)):  ### Tirar as cartas da mao do jogador no baralho ###
+            for k in mao_jogador[contador][0]:
+                    print(k)
+                    listaCarta[k] -= 1
+            contador += 1
+        
+
+    carta_dealer = mao_dealer[0][0]     ### Tirar a carta voltada para cima da mao do dealer no baralho ###
+    listaCarta[carta_dealer] -= 1
+
+
+    rebenta = 0
+    nTotalCarta_baralho = 0
+    for n in listaCarta:
+        nTotalCarta_baralho += listaCarta[n]    ### Calcular quantas vezes que pode rebentar tirando mais uma carta no baralho ###
+        if n == 'J' or n =='Q' or n=='K':
+            if valor(mao_jogador) + 10 > 21:
+                rebenta = rebenta + listaCarta[n]
+        elif n == 'A':
+            if valor(mao_jogador)+1 > 21:   ### So precisamos ver para caso de A = 1, porque se rebentasse com A = 1, obviamente tambem rebenta com A = 11 
+                rebenta += listaCarta[n]
+        else:
+            if valor(mao_jogador)+int(n) > 21:    
+                rebenta += listaCarta[n] 
+
+    prob = round((rebenta / nTotalCarta_baralho),3)  ### Calculo da probabilidade da mao rebentar ###
+    return prob
+
+
 def ronda(i,jogador,aposta):
     ganho = 0
     baralho = ler_baralho(i)
