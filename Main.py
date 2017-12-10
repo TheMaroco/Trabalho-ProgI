@@ -14,30 +14,33 @@
 #####################################
 
 ####ESPAÇO PARA DEFINIR AS FUNÇÕES:::
-def existeAs(mao):
-    """ Funcao que mostra se tem um As na mao
+def existem_ases(mao):
+    """ Funcao que devolve o numero de ases numa mão
     Requires: lista da mao
-    Ensures: return de um boolean true ou false
+    Ensures: return de um int do número de ases na mão
     """
+    ases = 0
     for face in mao:
         if face[0] == 'A':
-            existe = True
-        else:
-            existe = False
-    return existe
+            ases += 1
+    return ases
 
 def valor(mao):
     """ Calcula o valor da mao
     Requires: lista da mao
     Ensures: return do valor dos pontos da mao
     """
+    
     valorCarta = {"A":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7,
                  "8":8, "9":9, "10":10, "J":10, "Q":10, "K":10}     #dicionario que contem o valor de cada carta
-    soma = 0    #variavel onde se vai acumular o total de pontos de uma mao
-    for face in mao:    #ciclo que vai somar os pontos de uma mao
-        soma += valorCarta[face[0]]
-        if soma > 21 and existeAs(mao) == True: #condicao que decide se o A tem valor 11 ou 1
-            soma -= 10
+    if type(mao) == tuple:
+        soma = valorCarta[mao[0]]
+    else:
+        soma = 0    #variavel onde se vai acumular o total de pontos de uma mao
+        for face in mao:    #ciclo que vai somar os pontos de uma mao
+            soma += valorCarta[face[0]]
+        if soma > 21 and existem_ases(mao) > 1: #condicao que decide se o A tem valor 11 ou 1
+            soma = soma - 10*(existem_ases(mao)-1)
     return soma
 
 
@@ -155,141 +158,169 @@ def ronda(i,jogador,aposta):
     mao_dealer = [baralho[1],baralho[3]]
     valor_jogador = valor(mao_jogador) # pontos do jogador
     valor_dealer = valor(mao_dealer)   # pontos de dealer
-
-    print("*** Ronda", i, "***")
+    #Print da ronda
+    print("\n*** Ronda", i, "***")
     print("Dealer:", mostra_mao(mao_dealer)[:5], "(?,?)")
     print("Jogador:", mostra_mao(mao_jogador), "-", valor_jogador,"-")
     print("\n* Joga", jogador, "*")
     
     ###Joga o jogador:
     if blackjack(mao_jogador):  #Caso de BlackJack na primeira cartada.
-        resultado_jogador = 'vitória blackjack'
         print(jogador, "fez BLACKJACK!")
     else: #Caso de não blackjack na primeira cartada.
-        
         decisao_jogador = (input("HIT, STAND ?")).lower()
-        print(decisao_jogador)
         if decisao_jogador != 'hit' and decisao_jogador != 'stand': #Gestão de input inválido
             decisao_jogador = 'stand'
 
-
-        
-            
         #PRINT da opção do jogador
         if decisao_jogador == "hit":
-            
-            while  (not bust(mao_jogador)) and (not blackjack(mao_jogador)) and decisao_jogador == "hit":
+            #Loop de jogo
+            while  (not bust(mao_jogador)) and (not blackjack(mao_jogador)) and decisao_jogador == "hit": #Em loop Condição testar se pode pedir carta
                  print(jogador, "decidiu HIT")
-                 mao_jogador.append(baralho.pop(0))
-                 valor_jogador = valor(mao_jogador)
-                 print(mostra_mao(mao_jogador), "-", valor_jogador, "-")
-                 if not bust(mao_jogador) and not blackjack(mao_jogador):
+                 mao_jogador.append(baralho.pop(0)) #Adiciona uma carta à mão do jogador
+                 valor_jogador = valor(mao_jogador) #Update dos pontos do jogador
+                 print(mostra_mao(mao_jogador), "-", valor_jogador, "-") 
+                 if not bust(mao_jogador) and not blackjack(mao_jogador): #De novo, perguntar ao jogador se quer outra carta (só se não BUST ou BJ)
                      decisao_jogador = (input("HIT, STAND ?")).lower()
 
-            if decisao_jogador == "stand":
+            if decisao_jogador == "stand": #Print da decisão de jogador
                 print(jogador, "decidiu STAND\n")
-                resultado_jogador = str(valor_jogador)
+                
                  
-        else:
-            print(jogador, "decidiu STAND\n")
-            resultado_jogador = str(valor_jogador)
-     
-        
-        
-       
+        else: #Jogador decide stand à primeira
+            print(jogador, "decidiu STAND\n")  #Print da decisão do jogador
 
-        if bust(mao_jogador):
-            resultado_jogador = "derrota"
-            resultado_dealer = "vitória"
-            resultado = "derrota"
+
+        if bust(mao_jogador):  #Testar se o jogador tem BUST
             ganho = -aposta
+            mao_dealer = 21 #Passa o valor 21 para o dealer (que não chega a jogar)
             print("BUST com", valor_jogador, "pontos")
-        if blackjack(mao_jogador):
-            resultado_jogador = "vitória blackjack"
+        if blackjack(mao_jogador): #Testar se o jogador tem BlackJack
             print(jogador, "fez BLACKJACK!")
 
    
      
-    ###Joga o dealer:
+    ###Testar se vale a pena o dealer jogar:
             
-    if resultado_jogador == "vitória blackjack":
+    if valor_jogador == 21:
         if valor(mao_dealer[0]) == 10 or valor(mao_dealer[0]) == 11:
             if blackjack(mao_dealer):
                 resultado = "empate"
             else:
-                resultado = "vitória blackjack"
-                ganho = (5*aposta)/2
-    if resultado_jogador != "derrota":
-        print("* Joga o dealer *")
+                resultado = "vitória Blackjack"
+    if not bust(mao_jogador): #Dealer só joga se o jogador não tiver perdido por BUST
+        #Dealer Joga:
+        print("\n* Joga o dealer *")
         print("Mão dealer:")
         print(mostra_mao(mao_dealer), "-", valor_dealer, "-")
-        if blackjack(mao_dealer):
+        if blackjack(mao_dealer): #Dealer tem blackjack na primeira cartada
             print("Dealer fez BLACKJACK!")
-            resultado_dealer = "vitória blackjack"
         else:
         
-            if valor_dealer < 17:
-                decisao_dealer = "hit"
+            if decisao_dealer(mao_dealer) == "HIT": #Dealer decide
                 print("Dealer decidiu HIT")
             else:
-                decisao_dealer = "stand"
                 print("Dealer decidiu STAND")
-            while not blackjack(mao_dealer) and not bust(mao_dealer) and decisao_dealer == "hit":
-                mao_dealer.append(baralho.pop(0))
-                valor_dealer = valor(mao_dealer)
-                print(mostra_mao(mao_dealer), "-", valor_dealer, "-")
-                if valor_dealer < 17:
-                    decisao_dealer = "hit"
-                    print("Dealer decidiu HIT")
-                else:
-                    decisao_dealer = "stand"
-                    print("Dealer decidiu STAND")
-            resultado_dealer = str(valor_dealer)
-            if blackjack(mao_dealer):
+            while not blackjack(mao_dealer) and not bust(mao_dealer) and decisao_dealer(mao_dealer) == "HIT": #Em loop Condição testar se pode pedir carta
+                mao_dealer.append(baralho.pop(0)) #Dealer recebe carta
+                valor_dealer = valor(mao_dealer) #Update dos pontos do dealer
+                print(mostra_mao(mao_dealer), "-", valor_dealer, "-") #Print da mão do dealer
+                if not bust(mao_dealer) and not blackjack(mao_dealer): #Dealer só decide se não tiver BUST ou BlackJack
+                    if decisao_dealer(mao_dealer) == "HIT": #Dealer decide outra vez
+                        print("Dealer decidiu HIT")
+                    else:
+                        print("Dealer decidiu STAND")
+            if blackjack(mao_dealer): #Testa se o o dealer tem BlackJakc
                 print("Dealer fez BLACKJACK!")
-                resultado_dealer = "vitória blackjack"
-            if bust(mao_dealer):
-                resultado_dealer = "BUST"
+            if bust(mao_dealer): #Testa se o dealer tem BUST
                 print("BUST com", valor_dealer, "pontos")
             
 
     ###TESTAR O RESULTADO DA RONDA
 
-    if resultado_jogador == "vitória blackjack" and resultado_dealer == "vitória blackjack": # Empatam os dois com blackjack
-        resultado = "empate"
-        ganho = 0
-    elif resultado_dealer == "BUST": #Dealer perde por BUST
-        resultado = "vitória"
-        ganho = aposta
-    elif resultado_dealer < resultado_jogador: #Dealer perde por pontos
-        resultado = "vitória"
-        ganho = aposta
-    elif resultado_dealer > resultado_jogador: #Dealer ganha por pontos
+    if valor_jogador > 21 or (valor_jogador<valor_dealer and valor_dealer<=21): #Jogador perde por BUST
         resultado = "derrota"
         ganho = -aposta
     else:
-        resultado = "empate" #Empatam por pontos
-
+        if valor_dealer > 21: #Jogador ganha por BUST do dealer
+            resultado = "vitória"
+            ganho = aposta
+        elif valor_jogador == valor_dealer:  #Empate
+            resultado = "empate"
+            ganho = 0
+        elif valor_jogador == 21: #Jogador ganha por BlackJack
+            resultado = "vitória Blackjack"
+            ganho = (3*aposta)/2
+        elif valor_jogador > valor_dealer: #Jogador ganha por pontos
+            resultado = "vitória"
+            ganho = aposta
 
     return (resultado, ganho)
 
 
 
+def jogar():
+    #Leitura dos dados do jogador
+    jogador = input("Nome: ")  #Nome
+    try:
+      montante = float(input("Com quantas fichas vais iniciar o jogo?: "))#Dinheiro com que começa o jogo   
+    except:
+      montante = 100.0
 
-#Leitura dos dados do jogador
-jogador = input("Nome: ")  #Nome
-try:
-  montante = float(input("Com quantas fichas vais iniciar o jogo?: "))#Dinheiro com que começa o jogo   
-except:
-  montante = 100.0
+    try:
+      aposta = int(input("Quanto apostas?: "))    #Valor de cada aposta!
+    except:
+      aposta = 10
 
-try:
-  aposta = int(input("Quanto apostas?: "))    #Valor de cada aposta!
-except:
-  aposta = 10
+    regra = input("Qual a regra do casino (s17 ou h17)?: ").upper() #Regra do casino
+    if regra != "H17":
+        regra = "S17"
 
-regra = input("Qual a regra do casino (s17 ou h17)?: ").upper() #Regra do casino
-if regra != "H17":
-    regra = "S17"
+    ###COMEÇA O JOGO###
 
-###COMEÇA O JOGO###
+    ##Print do quador inicial###
+    print("\n\n=== Vamos começar ===")
+    print("Jogador:", jogador)
+    print("Saldo inicial:", montante)
+    print("Valor da aposta:", aposta)
+
+    #Criação das variáveis estatísticas:
+    n_rondas = 1
+    montante_inicial = montante
+    vitorias = 0
+    derrotas = 0
+    empates = 0
+    v_blackjack = 0
+    sair = ""
+    #Loop das rondas
+    while sair != "quit" and montante != 0:
+        resultado = ronda(n_rondas, jogador, aposta)
+        print("\nResultado da ronda:", resultado[0], "com ganho", resultado[1])
+        montante += resultado[1]
+        print("O seu saldo atual é:", montante)
+        if resultado[0] == "vitória":
+            vitorias += 1
+        elif resultado[0] == "vitória Blackjack":
+            v_blackjack += 1
+        elif resultado [0] == "empate":
+            empates += 1
+        else:
+            derrotas += 1
+        n_rondas += 1
+
+
+
+        sair = input("Mais uma ronda (QUIT para terminar) ?").lower()
+
+    #Print das estátisticas
+    print("\n=== Algumas Estatísticas ===")
+    print("\n\n" + jogador, "jogou", n_rondas, "rondas")
+    print("Entrou no jogo com", montante_inicial,"e agora tem", montante)
+    print("Número de vitórias:", vitorias)
+    print("Número de derrotas:", derrotas)
+    print("Número de empates:", empates)
+    print("Vitórias blackjack:", v_blackjack)
+
+jogar()
+    
+
