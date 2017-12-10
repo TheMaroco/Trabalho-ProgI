@@ -75,7 +75,6 @@ def blackjack(mao):
 
     return Blackjack
      
-    
 def ler_baralho(n):
     """Lê o baralho usado na ronda n
 
@@ -87,10 +86,12 @@ def ler_baralho(n):
     baralho = open(strBaralho, 'r') #ABRE O BARALHO
     listBaralho = [] #Lista do baralho
     for linha in baralho:
-        listBaralho.append(baralho.readline()[:-1].split()) #GOD MODE DE MODULOS PARA criar o baralho
+        listBaralho.append(tuple(linha.split()))
+      
     baralho.close() #FECHAR O FICHEIRO
     
-    return listBaralho
+    return listBaralho    
+
 
 def mostra_mao(mao):
     """Recebe a lista da mmão e devolve a string formatada dessa mesma mão
