@@ -15,10 +15,7 @@
 
 ####ESPAÇO PARA DEFINIR AS FUNÇÕES:::
 def existem_ases(mao):
-    """ Funcao que devolve o numero de ases numa mão
-    Requires: lista da mao
-    Ensures: return de um int do número de ases na mão
-    """
+    
     ases = 0
     for face in mao:
         if face[0] == 'A':
@@ -26,12 +23,17 @@ def existem_ases(mao):
     return ases
 
 def valor(mao):
-    """ Calcula o valor da mao
-    Requires: lista da mao
-    Ensures: return do valor dos pontos da mao
+    """Calcula o valor de uma mão.
+    Por exemplo, dada a seguinte mão:
+        [("5", "P"), ("K", "C")]
+    A função deve devolver o inteiro 15.
+
+    Requires: Uma mão (lista de pares de strings (face, naipe))
+    Ensures: Um inteiro com o valor total da mão
     """
-    
-    valorCarta = {"A":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7,
+    pass
+
+    valorCarta = {"A":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7,  
                  "8":8, "9":9, "10":10, "J":10, "Q":10, "K":10}     #dicionario que contem o valor de cada carta
     if type(mao) == tuple:
         soma = valorCarta[mao[0]]
@@ -45,10 +47,17 @@ def valor(mao):
 
 
 def decisao_dealer(mao):
-    """ Determinar a decisão do dealer
-        Require : lista da mão do dealer
-        Ensures Return HIT ou STAND
+    """Calcula a decisão do dealer para a uma dada mão.
+    Por exemplo, dada a seguinte mão:
+        [("10", "P"), ("2", "E")]
+    A função deve devolver o valor "HIT".
+
+    Requires: Uma mão (lista de pares de strings (face, naipe))
+    Ensures: uma de duas strings ("HIT" ou "STAND"), consoante o valor da
+    mão e as regras do casino.
     """
+    pass
+    
     pontos_dealer = valor(mao)
 
     if pontos_dealer < 17 :
@@ -57,21 +66,36 @@ def decisao_dealer(mao):
         return 'STAND'
 
 def bust(mao):
-    """ funçao que determina se a mao rebentou ou nao
-        Requires : lista da mao
-        Ensures: return True no caso de rebentar e False se nao rebentar
+    """Verifica se uma mão 'rebenta', ou seja, se o valor da mão
+    ultrapassa os 21 pontos.
+    Por exemplo, dada a seguinte mão:
+        [("10", "P"), ("K", "C"), ("2", "E")]
+    A função deve devolver o valor True.
+
+    Requires: mao: uma mão (lista de pares de strings (face, naipe))
+    Ensures: um Booleano (True ou False), consoante o valor da mão
+    ultrapassa ou não os 21 pontos
     """
-    
+    pass
+     
     rebentou = False
     if valor(mao) > 21:
         rebentou = True
     return rebentou
 
 def blackjack(mao):
-    """ Verificar se tem balckjack na mão
-        Requires : lista da mão inicial
-        Ensures: se der 21 pontos devolve True, caso contrario devolve False
+    """Verifica se uma mão representa um blackjack, ou seja, se contém
+    exactamente um ás e uma carta de valor 10.
+    Por exemplo, dada a seguinte mão:
+        [("A", "P"), ("10", "C")]
+    A função deve devolver o valor True.
+
+    Requires: mao: uma mão (lista de pares de strings (face, naipe))
+    Ensures: um Booleano (True ou False), consoante a mão contém
+    ou não um ás e uma carta de valor 10.
     """
+    pass
+    
     Blackjack = False
     if valor(mao) == 21 :
         Blackjack = True
@@ -79,11 +103,18 @@ def blackjack(mao):
     return Blackjack
      
 def ler_baralho(n):
-    """Lê o baralho usado na ronda n
+    """Lê um baralho do ficheiro com o número específicado
+    como parâmetro e devolve o baralho contido neste.
+    Por exemplo dado 10 como argumento a função deve ler o ficheiro
+    de nome "baralho_10.txt".
 
-    Requires: int com número da ronda
-    Ensures: Lista com o Baralho respetivo à ronda
+    Requires: n: um inteiro positivo n, que representa o número do
+    baralho a ler.
+    Ensures: O baralho contido no ficheiro, como uma lista de
+    pares de strings (face, naipe)
     """
+    pass
+    
     strBaralho = "baralho_" + str(n) + ".txt" #ARTIMANHA PARA LER OS BARALHOS INDICE n
 
     baralho = open(strBaralho, 'r') #ABRE O BARALHO
@@ -97,11 +128,7 @@ def ler_baralho(n):
 
 
 def mostra_mao(mao):
-    """Recebe a lista da mmão e devolve a string formatada dessa mesma mão
-
-    Requires: list da mao
-    Ensures: Return da string obtida por formatação da lista
-    """
+    
     mao = str(mao)
     mao = mao[1:(len(mao)-1)]
     mao = mao.replace("'", "")
@@ -110,6 +137,17 @@ def mostra_mao(mao):
     return mao
 
 def calcula_hint(mao_jogador,mao_dealer):
+    """Calcula a probabilidade de o jogador rebentar se fizer "HIT" sobre a mão
+    dada, com base nas cartas que estão visíveis (as suas e as cartas visíveis da
+    mão do dealer).
+
+    Requires: mao_jogador: a mão do jogador (lista de pares de strings (face, naipe)), e
+    mao_dealer: a mão do dealer (lista de pares de strings (face, naipe))
+    Ensures: um float representando a probabilidade de o jogado rebentar se
+    fizer "HIT", dadas as cartas em jogo, arredondado à terceira casa decimal
+    """
+    pass
+    
     valor_mao_jogador = valor(mao_jogador)
     
     listaCarta = {}
@@ -152,6 +190,20 @@ def calcula_hint(mao_jogador,mao_dealer):
 
 
 def ronda(i,jogador,aposta):
+    """Executa uma ronda completa, para o jogador dado. Esta função produz ainda
+    toda a interação com o utilizador relativa à ronda i (de acordo com o
+    ilustrado nos exemplos anexos ao enunciado)
+
+    Requires: i: inteiro positivo, que representa o número da ronda;
+    jogador: uma string com o nome do jogador; aposta: inteiro com o valor da
+    aposta.
+    Ensures: um par (resultado, ganho), onde resultado é uma string
+    de entre "vitória blackjack", "vitória", "derrota" ou "empate", e ganho
+    é um float, positivo ou negativo, arredondado a duas casas decimais,
+    correspondente ao valor que o jogador ganhou ou perdeu nessa ronda.
+    """
+    pass
+    
     ganho = 0
     baralho = ler_baralho(i)
     mao_jogador = [baralho[0],baralho[2]]
@@ -260,6 +312,15 @@ def ronda(i,jogador,aposta):
 
 
 def jogar():
+    """Joga um jogo completo, com um número variável de rondas.
+    Esta função produz toda a  interação com o utilizador (de acordo com o
+    ilustrado nos exemplos anexos ao enunciado).
+
+    Requires: a função não recebe argumentos
+    Ensures: a função não devolve nenhum valor.
+    """
+    pass
+
     #Leitura dos dados do jogador
     jogador = input("Nome: ")  #Nome
     try:
