@@ -384,4 +384,10 @@ def jogar():
 
 jogar()
     
-
+#def soft(mao):
+ #   if existem_ases(mao) > 0 and valor(mao)-11 == 6:
+  #      soft = True 
+   # else:
+    #    soft = False
+    #return soft
+        
