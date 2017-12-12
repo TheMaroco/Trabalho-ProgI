@@ -86,7 +86,7 @@ def decisao_dealer(mao, regra):
     if pontos_dealer < 17:         
         decisao = 'HIT'
     elif pontos_dealer == 17:
-        if regra = "H17":
+        if regra == "H17":
             if soft(mao):
                 decisao = "HIT"
         
@@ -154,6 +154,18 @@ def ler_baralho(n):
 
 
 def mostra_mao(mao):
+    """Recebe a lista das cartas de uma mão
+    e devolve uma string das cartas dessa mão de acordo com acordo
+    tipologia específicada. 
+    Por Exemplo, dada a lista:
+        [('A', 'E'),('A','C')]
+    devolve a string:
+        (A,E)(A,C)
+    
+    Requires: mao: uma lista com os tuplos que representam as cartas
+    de um mão.
+    Ensures: uma string com a tipologia específica do jogo.
+    """
     
     mao = str(mao)
     mao = mao[1:(len(mao)-1)]
@@ -188,7 +200,6 @@ def calcula_hint(mao_jogador,mao_dealer):
     contador = 0
     for j in range(contador,len(mao_jogador)):  ### Tirar as cartas da mao do jogador no baralho ###
             for k in mao_jogador[contador][0]:
-                    print(k)
                     listaCarta[k] -= 1
             contador += 1
         
@@ -251,21 +262,28 @@ def ronda(i,jogador,aposta,regra):
             decisao_jogador = 'stand'
 
         #PRINT da opção do jogador
-        if decisao_jogador == "hit":
+        if decisao_jogador == "hit" or decisao_jogador == "hint": #jogador decide hit
             #Loop de jogo
-            while  (not bust(mao_jogador)) and (not blackjack(mao_jogador)) and decisao_jogador == "hit": #Em loop Condição testar se pode pedir carta
-                 print(jogador, "decidiu HIT")
-                 mao_jogador.append(baralho.pop(0)) #Adiciona uma carta à mão do jogador
-                 valor_jogador = valor(mao_jogador) #Update dos pontos do jogador
-                 print(mostra_mao(mao_jogador), "-", valor_jogador, "-") 
-                 if not bust(mao_jogador) and not blackjack(mao_jogador): #De novo, perguntar ao jogador se quer outra carta (só se não BUST ou BJ)
-                     decisao_jogador = (input("HIT, STAND ?")).lower()
-
+            while  (not bust(mao_jogador)) and (not blackjack(mao_jogador)) and decisao_jogador == "hit" or decisao_jogador == "hint":
+                #Em loop Condição testar se pode pedir carta
+                #Testa se o jogador decidiu HIT ou Hint
+                if decisao_jogador == "hit":
+                     print(jogador, "decidiu HIT")
+                     mao_jogador.append(baralho.pop(0)) #Adiciona uma carta à mão do jogador
+                     valor_jogador = valor(mao_jogador) #Update dos pontos do jogador
+                     print(mostra_mao(mao_jogador), "-", valor_jogador, "-") 
+                     if not bust(mao_jogador) and not blackjack(mao_jogador): #De novo, perguntar ao jogador se quer outra carta (só se não BUST ou BJ)
+                         decisao_jogador = (input("HIT, STAND ou HINT?")).lower() 
+                else:
+                    print(jogador, "decidiu HINT")
+                    print("A probabilidade de rebentar com a próxima carta é:", calcula_hint(mao_jogador,mao_dealer))
+                    decisao_jogador = (input("HIT, STAND ou HINT?")).lower() #Reavalia a decisão do jogador
             if decisao_jogador == "stand": #Print da decisão de jogador
                 print(jogador, "decidiu STAND\n")
-                
+        
+            
                  
-        else: #Jogador decide stand à primeira
+        else: #Jogador decide stand à primeira 
             print(jogador, "decidiu STAND\n")  #Print da decisão do jogador
 
 
@@ -381,7 +399,7 @@ def jogar():
     sair = ""
     #Loop das rondas
     while sair != "quit" and montante != 0:
-        resultado = ronda(n_rondas, jogador, aposta)
+        resultado = ronda(n_rondas, jogador, aposta, regra)
         print("\nResultado da ronda:", resultado[0], "com ganho", resultado[1])
         montante += resultado[1]
         print("O seu saldo atual é:", montante)
@@ -401,7 +419,7 @@ def jogar():
 
     #Print das estátisticas
     print("\n=== Algumas Estatísticas ===")
-    print("\n\n" + jogador, "jogou", n_rondas, "rondas")
+    print("\n\n" + jogador, "jogou", n_rondas-1, "rondas")
     print("Entrou no jogo com", montante_inicial,"e agora tem", montante)
     print("Número de vitórias:", vitorias)
     print("Número de derrotas:", derrotas)
