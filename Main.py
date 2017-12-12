@@ -45,8 +45,28 @@ def valor(mao):
             soma = soma - 10*(existem_ases(mao)-1)
     return soma
 
+def soft(mao):
+    """Verifica se uma mão é 'soft' ou 'hard', ou seja, se a adição de mais uma
+    carta à mão nunca fará o jogador 'rebentar'.
+    Por exemplo, dada a seguinte mão:
+        [("A", "P"), ("6", "C")]
+    A função deve devolver o valor True.
 
-def decisao_dealer(mao):
+    Requires: mao: uma mão (lista de pares de strings (face, naipe))
+    Ensures: um Booleano (True ou False). True se a adição de uma carta à mão
+    nunca possa fazer o seu valor ultrapassar os 21 pontos (mão 'soft'). False
+    False caso a adição de uma carta à mão a possa fazer ultrapassar os 21
+    pontos (mão 'hard').
+    """
+    pass
+
+    if existem_ases(mao) > 0 and valor(mao)-11 == 6:
+        soft = True 
+    else:
+        soft = False
+    return soft
+
+def decisao_dealer(mao, regra):
     """Calcula a decisão do dealer para a uma dada mão.
     Por exemplo, dada a seguinte mão:
         [("10", "P"), ("2", "E")]
@@ -59,12 +79,18 @@ def decisao_dealer(mao):
     pass
     
     pontos_dealer = valor(mao)
-
-    if pontos_dealer < 17 :
-        return 'HIT'
-    else:
-        return 'STAND'
-
+    
+    decisao = "STAND"
+    
+    
+    if pontos_dealer < 17:         
+        decisao = 'HIT'
+    elif pontos_dealer == 17:
+        if regra = "H17":
+            if soft(mao):
+                decisao = "HIT"
+        
+    return decisao
 def bust(mao):
     """Verifica se uma mão 'rebenta', ou seja, se o valor da mão
     ultrapassa os 21 pontos.
@@ -189,7 +215,7 @@ def calcula_hint(mao_jogador,mao_dealer):
     return prob
 
 
-def ronda(i,jogador,aposta):
+def ronda(i,jogador,aposta,regra):
     """Executa uma ronda completa, para o jogador dado. Esta função produz ainda
     toda a interação com o utilizador relativa à ronda i (de acordo com o
     ilustrado nos exemplos anexos ao enunciado)
@@ -220,8 +246,8 @@ def ronda(i,jogador,aposta):
     if blackjack(mao_jogador):  #Caso de BlackJack na primeira cartada.
         print(jogador, "fez BLACKJACK!")
     else: #Caso de não blackjack na primeira cartada.
-        decisao_jogador = (input("HIT, STAND ?")).lower()
-        if decisao_jogador != 'hit' and decisao_jogador != 'stand': #Gestão de input inválido
+        decisao_jogador = (input("HIT, STAND ou HINT?")).lower()
+        if decisao_jogador != 'hit' and decisao_jogador != 'stand' and decisao_jogador != 'hint': #Gestão de input inválido
             decisao_jogador = 'stand'
 
         #PRINT da opção do jogador
@@ -269,16 +295,16 @@ def ronda(i,jogador,aposta):
             print("Dealer fez BLACKJACK!")
         else:
         
-            if decisao_dealer(mao_dealer) == "HIT": #Dealer decide
+            if decisao_dealer(mao_dealer, regra) == "HIT": #Dealer decide
                 print("Dealer decidiu HIT")
             else:
                 print("Dealer decidiu STAND")
-            while not blackjack(mao_dealer) and not bust(mao_dealer) and decisao_dealer(mao_dealer) == "HIT": #Em loop Condição testar se pode pedir carta
+            while not blackjack(mao_dealer) and not bust(mao_dealer) and decisao_dealer(mao_dealer, regra) == "HIT": #Em loop Condição testar se pode pedir carta
                 mao_dealer.append(baralho.pop(0)) #Dealer recebe carta
                 valor_dealer = valor(mao_dealer) #Update dos pontos do dealer
                 print(mostra_mao(mao_dealer), "-", valor_dealer, "-") #Print da mão do dealer
                 if not bust(mao_dealer) and not blackjack(mao_dealer): #Dealer só decide se não tiver BUST ou BlackJack
-                    if decisao_dealer(mao_dealer) == "HIT": #Dealer decide outra vez
+                    if decisao_dealer(mao_dealer, regra) == "HIT": #Dealer decide outra vez
                         print("Dealer decidiu HIT")
                     else:
                         print("Dealer decidiu STAND")
@@ -384,10 +410,5 @@ def jogar():
 
 jogar()
     
-#def soft(mao):
- #   if existem_ases(mao) > 0 and valor(mao)-11 == 6:
-  #      soft = True 
-   # else:
-    #    soft = False
-    #return soft
+
         
