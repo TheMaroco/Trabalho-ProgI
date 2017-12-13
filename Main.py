@@ -62,7 +62,7 @@ def soft(mao):
     """
     pass
 
-    mao_sem_ases = [carta for carta in mao if carta[0] != 'A']
+    mao_sem_ases = [carta for carta in mao if carta[0] != 'A'] #Lista das cartas da mão que não são ases.
 
     if existem_ases(mao) > 0 and (valor(mao_sem_ases) + (existem_ases(mao) - 1)) <= 10:
         soft = True 
@@ -315,7 +315,7 @@ def ronda(i,jogador,aposta,regra):
     
     if not bust(mao_jogador) and not blackjack(mao_jogador): #Dealer só joga se o jogador não tiver perdido por BUST
         #Dealer Joga:
-        print("\n* Joga o dealer *")
+        print("* Joga o dealer *")
         print("Mão dealer:")
         print(mostra_mao(mao_dealer), "-", valor_dealer, "-")
         if blackjack(mao_dealer): #Dealer tem blackjack na primeira cartada
