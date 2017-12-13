@@ -301,10 +301,15 @@ def ronda(i,jogador,aposta,regra):
     if valor_jogador == 21:
         if valor(mao_dealer[0]) == 10 or valor(mao_dealer[0]) == 11:
             if blackjack(mao_dealer):
+                print("Mão dealer:", mostra_mao(mao_dealer))
+                print("Dealer fez BLACKJACK!")
                 resultado = "empate"
             else:
                 resultado = "vitória Blackjack"
-    if not bust(mao_jogador): #Dealer só joga se o jogador não tiver perdido por BUST
+
+    
+    
+    if not bust(mao_jogador) and not blackjack(mao_jogador): #Dealer só joga se o jogador não tiver perdido por BUST
         #Dealer Joga:
         print("\n* Joga o dealer *")
         print("Mão dealer:")
@@ -398,7 +403,7 @@ def jogar():
     v_blackjack = 0
     sair = ""
     #Loop das rondas
-    while sair != "quit" and montante != 0:
+    while sair != "quit" and montante != 0 and montante >= aposta:
         resultado = ronda(n_rondas, jogador, aposta, regra)
         print("\nResultado da ronda:", resultado[0], "com ganho", resultado[1])
         montante += resultado[1]
@@ -415,13 +420,13 @@ def jogar():
 
 
 
-        sair = input("Mais uma ronda (QUIT para terminar) ?").lower()
+        sair = input("Mais uma ronda (QUIT para terminar)?").lower()
 
     #Print das estátisticas
     print("\n=== Algumas Estatísticas ===")
     print("\n\n" + jogador, "jogou", n_rondas-1, "rondas")
     print("Entrou no jogo com", montante_inicial,"e agora tem", montante)
-    print("Número de vitórias:", vitorias)
+    print("Número de vitórias:", vitorias + v_blackjack)
     print("Número de derrotas:", derrotas)
     print("Número de empates:", empates)
     print("Vitórias blackjack:", v_blackjack)
