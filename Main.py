@@ -41,8 +41,10 @@ def valor(mao):
         soma = 0    #variavel onde se vai acumular o total de pontos de uma mao
         for face in mao:    #ciclo que vai somar os pontos de uma mao
             soma += valorCarta[face[0]]
-        if soma > 21 and existem_ases(mao) > 1: #condicao que decide se o A tem valor 11 ou 1
-            soma = soma - 10*(existem_ases(mao)-1)
+        n_ases = existem_ases(mao)
+        while soma > 21 and n_ases >= 1: #condicao que decide se o A tem valor 11 ou 1
+            soma = soma - 10
+            n_ases -= 1
     return soma
 
 def soft(mao):
@@ -60,10 +62,12 @@ def soft(mao):
     """
     pass
 
-    if existem_ases(mao) > 0 and valor(mao)-11 == 6:
+    mao_sem_ases = [carta for carta in mao if carta[0] != 'A']
+
+    if existem_ases(mao) > 0 and (valor(mao_sem_ases) + (existem_ases(mao) - 1)) <= 10:
         soft = True 
     else:
-        soft = False
+        soft = False                             
     return soft
 
 def decisao_dealer(mao, regra):
@@ -243,8 +247,8 @@ def ronda(i,jogador,aposta,regra):
     
     ganho = 0
     baralho = ler_baralho(i)
-    mao_jogador = [baralho[0],baralho[2]]
-    mao_dealer = [baralho[1],baralho[3]]
+    mao_jogador = [baralho.pop(0),baralho.pop(1)]
+    mao_dealer = [baralho.pop(0),baralho.pop(0)]
     valor_jogador = valor(mao_jogador) # pontos do jogador
     valor_dealer = valor(mao_dealer)   # pontos de dealer
     #Print da ronda
@@ -257,7 +261,7 @@ def ronda(i,jogador,aposta,regra):
     if blackjack(mao_jogador):  #Caso de BlackJack na primeira cartada.
         print(jogador, "fez BLACKJACK!")
     else: #Caso de não blackjack na primeira cartada.
-        decisao_jogador = (input("HIT, STAND ou HINT?")).lower()
+        decisao_jogador = (input("HIT, STAND ou HINT? ")).lower()
         if decisao_jogador != 'hit' and decisao_jogador != 'stand' and decisao_jogador != 'hint': #Gestão de input inválido
             decisao_jogador = 'stand'
 
@@ -273,11 +277,11 @@ def ronda(i,jogador,aposta,regra):
                      valor_jogador = valor(mao_jogador) #Update dos pontos do jogador
                      print(mostra_mao(mao_jogador), "-", valor_jogador, "-") 
                      if not bust(mao_jogador) and not blackjack(mao_jogador): #De novo, perguntar ao jogador se quer outra carta (só se não BUST ou BJ)
-                         decisao_jogador = (input("HIT, STAND ou HINT?")).lower() 
+                         decisao_jogador = (input("HIT, STAND ou HINT? ")).lower() 
                 else:
                     print(jogador, "decidiu HINT")
                     print("A probabilidade de rebentar com a próxima carta é:", calcula_hint(mao_jogador,mao_dealer))
-                    decisao_jogador = (input("HIT, STAND ou HINT?")).lower() #Reavalia a decisão do jogador
+                    decisao_jogador = (input("HIT, STAND ou HINT? ")).lower() #Reavalia a decisão do jogador
             if decisao_jogador == "stand": #Print da decisão de jogador
                 print(jogador, "decidiu STAND\n")
         
