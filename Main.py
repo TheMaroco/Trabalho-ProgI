@@ -15,7 +15,12 @@
 
 ####ESPAÇO PARA DEFINIR AS FUNÇÕES:::
 def existem_ases(mao):
+    """Recebe uma lista com as cartas de uma mão e devolve
+    o número de ases presentes nessa mão.
     
+    Requires: list com tuplos das carta.
+    Ensures: int relativo ao número de ases nessa mão.
+    """
     ases = 0
     for face in mao:
         if face[0] == 'A':
