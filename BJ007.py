@@ -21,9 +21,10 @@ def existem_ases(mao):
     Requires: list com tuplos das carta.
     Ensures: int relativo ao número de ases nessa mão.
     """
+    #Valor default de zero Áses.
     ases = 0
-    for face in mao:
-        if face[0] == 'A':
+    for carta in mao: #Iterar sobre as cartas da mão. 
+        if carta[0] == 'A': #Condição que testa se a carta é Ás.
             ases += 1
     return ases
 
@@ -39,15 +40,15 @@ def valor(mao):
     pass
 
     valorCarta = {"A":11, "2":2, "3":3, "4":4, "5":5, "6":6, "7":7,  
-                 "8":8, "9":9, "10":10, "J":10, "Q":10, "K":10}     #dicionario que contem o valor de cada carta
+                 "8":8, "9":9, "10":10, "J":10, "Q":10, "K":10}     #Dicionario que contem o valor de cada carta.
     if type(mao) == tuple:
         soma = valorCarta[mao[0]]
     else:
-        soma = 0    #variavel onde se vai acumular o total de pontos de uma mao
-        for face in mao:    #ciclo que vai somar os pontos de uma mao
+        soma = 0    #Variável onde se vai acumular o total de pontos de uma mão.
+        for face in mao:    #Ciclo que vai somar os pontos de uma mão.
             soma += valorCarta[face[0]]
         n_ases = existem_ases(mao)
-        while soma > 21 and n_ases >= 1: #condicao que decide se o A tem valor 11 ou 1
+        while soma > 21 and n_ases >= 1: #Condição que decide se o Ás tem valor 11 ou 1.
             soma = soma - 10
             n_ases -= 1
     return soma
@@ -67,9 +68,9 @@ def soft(mao):
     """
     pass
 
-    mao_sem_ases = [carta for carta in mao if carta[0] != 'A'] #Lista das cartas da mão que não são ases.
+    mao_sem_ases = [carta for carta in mao if carta[0] != 'A'] #Definir lista por compreensão das cartas da mão que não são ases.
 
-    if existem_ases(mao) > 0 and (valor(mao_sem_ases) + (existem_ases(mao) - 1)) <= 10:
+    if existem_ases(mao) > 0 and (valor(mao_sem_ases) + (existem_ases(mao) - 1)) <= 10: #Fórmula para averiguar o tipo de mão
         soft = True 
     else:
         soft = False                             
@@ -86,12 +87,12 @@ def decisao_dealer(mao, regra):
     mão e as regras do casino.
     """
     pass
-    
+    #Leitura dos pontos do dealer
     pontos_dealer = valor(mao)
-    
+    #Decisão default de STAND
     decisao = "STAND"
     
-    
+    #Condição para mudar a decisão
     if pontos_dealer < 17:         
         decisao = 'HIT'
     elif pontos_dealer == 17:
@@ -150,7 +151,7 @@ def ler_baralho(n):
     """
     pass
     
-    strBaralho = "baralho_" + str(n) + ".txt" #ARTIMANHA PARA LER OS BARALHOS INDICE n
+    strBaralho = "baralho_" + str(n) + ".txt" #Concatenação de strings para formar o nome dos ficheiros
 
     baralho = open(strBaralho, 'r') #ABRE O BARALHO
     listBaralho = [] #Lista do baralho
@@ -176,11 +177,12 @@ def mostra_mao(mao):
     Ensures: uma string com a tipologia específica do jogo.
     """
     
-    mao = str(mao)
-    mao = mao[1:(len(mao)-1)]
-    mao = mao.replace("'", "")
-    mao = mao.replace(" ", "")
-    mao = mao.replace("),(", ") (")
+    mao = str(mao) #Converte a lista em string
+    mao = mao[1:(len(mao)-1)] #Slice da lista
+    mao = mao.replace("'", "") #Substituição de '
+    mao = mao.replace(" ", "") #Substiuição de espaços vazios
+    mao = mao.replace("),(", ") (") #Substiuição de "),(" por ") ("
+    
     return mao
 
 def calcula_hint(mao_jogador,mao_dealer):
@@ -242,11 +244,11 @@ def ronda(i,jogador,aposta,regra):
 
     Requires: i: inteiro positivo, que representa o número da ronda;
     jogador: uma string com o nome do jogador; aposta: inteiro com o valor da
-    aposta.
+    aposta; regra: uma string ("S17" ou "H17") que indica qual a regra do
+    casino.
     Ensures: um par (resultado, ganho), onde resultado é uma string
     de entre "vitória blackjack", "vitória", "derrota" ou "empate", e ganho
-    é um float, positivo ou negativo, arredondado a duas casas decimais,
-    correspondente ao valor que o jogador ganhou ou perdeu nessa ronda.
+    é um float, positivo ou negativo correspondente ao valor que o jogador ganhou ou perdeu nessa ronda.
     """
     pass
     
@@ -340,7 +342,7 @@ def ronda(i,jogador,aposta,regra):
                         print("Dealer decidiu HIT")
                     else:
                         print("Dealer decidiu STAND")
-            if blackjack(mao_dealer): #Testa se o o dealer tem BlackJakc
+            if blackjack(mao_dealer): #Testa se o o dealer tem Blackjack
                 print("Dealer fez BLACKJACK!")
             if bust(mao_dealer): #Testa se o dealer tem BUST
                 print("BUST com", valor_dealer, "pontos")
@@ -364,7 +366,8 @@ def ronda(i,jogador,aposta,regra):
         elif valor_jogador > valor_dealer: #Jogador ganha por pontos
             resultado = "vitória"
             ganho = aposta
-
+    
+    
     return (resultado, ganho)
 
 
@@ -397,7 +400,7 @@ def jogar():
 
     ###COMEÇA O JOGO###
 
-    ##Print do quador inicial###
+    ##Print do quadro inicial###
     print("\n\n=== Vamos começar ===")
     print("Jogador:", jogador)
     print("Saldo inicial:", montante)
@@ -410,7 +413,9 @@ def jogar():
     derrotas = 0
     empates = 0
     v_blackjack = 0
+    #variável de decisão de mais uma ronda:
     sair = ""
+    
     #Loop das rondas
     while sair != "quit" and montante != 0 and montante >= aposta:
         resultado = ronda(n_rondas, jogador, aposta, regra)
@@ -440,7 +445,7 @@ def jogar():
     print("Número de empates:", empates)
     print("Vitórias blackjack:", v_blackjack)
 
-jogar()
+
     
 
         
